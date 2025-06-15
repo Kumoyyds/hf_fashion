@@ -52,3 +52,21 @@ For support, questions, or feedback regarding the CrewFashionColor Crew or crewA
 - [Chat with our docs](https://chatg.pt/DWjSBZn)
 
 Let's create wonders together with the power and simplicity of crewAI.
+
+
+# How it works
+**researcher agent**: doing the market research to understand the trend of color which could be suitable to given product. 
+**design_insight_specialist**: making the final decision on the colorway of the provided product.   
+**designer**: generating the illustration of the new colorway design  
+**design_explainer**: providing the story and philosophy of the new design.
+
+# how to run it. 
+1. `crewai run`
+2. Input your original design and your needs.   
+
+waiting for a little while you will get:  
+1. the new design image  
+2. the explanation of the new design.
+
+
+currently, we are still fixing the unstability of image generation.   
