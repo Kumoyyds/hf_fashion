@@ -4,9 +4,11 @@ from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
-from crewai_tools import FirecrawlCrawlWebsiteTool, tool
+from crewai_tools import FirecrawlCrawlWebsiteTool
+from crewai.tools import tool
 
-from crewai_tools import SerperDevTool, FirecrawlSearchTool, ScrapeWebsiteTool
+import requests
+from crewai_tools import SerperDevTool, FirecrawlSearchTool, ScrapeWebsiteTool, DallETool
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
@@ -15,7 +17,7 @@ from crewai_tools import SerperDevTool, FirecrawlSearchTool, ScrapeWebsiteTool
 from PIL import Image
 from transformers import BlipProcessor, BlipForConditionalGeneration
 
-Image_path = input('enter the path of your original design:\n')
+
 
 @tool("read the content of original design")
 def read_image_content(image_path: str) -> str:
@@ -24,7 +26,7 @@ def read_image_content(image_path: str) -> str:
     """
     processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-large")
     model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-large")
-    raw_image = Image.open(image_path).convert('RGB')
+    raw_image = Image.open(requests.get(image_path, stream=True).raw).convert('RGB')
     # unconditional image captioning
     inputs = processor(raw_image, return_tensors="pt")
     out = model.generate(**inputs)
@@ -32,13 +34,15 @@ def read_image_content(image_path: str) -> str:
     return processor.decode(out[0], skip_special_tokens=True)
 
 
-google_search = SerperDevTool(n_results=10, country='fr')
+google_search = SerperDevTool()
 fire_tool = FirecrawlCrawlWebsiteTool(url='firecrawl.dev')
+img_tool = DallETool()
 
 reasoner = llm = LLM(
     model="anthropic/claude-opus-4-20250514"
 )
 
+simple_scrape = ScrapeWebsiteTool(website_url='https://www.pantone.com/eu/fr/color-of-the-year/2025')
 
 
 
@@ -62,15 +66,35 @@ class CrewFashionColor():
             config=self.agents_config['researcher'], # type: ignore[index]
             verbose=True,
             tools=[
-                read_image_content,google_search, fire_tool
-            ]
+                google_search, fire_tool
+            ],
+            llm = 'gpt-4o'
         )
 
     @agent
-    def reporting_analyst(self) -> Agent:
+    def design_insight_specialist(self) -> Agent:
         return Agent(
-            config=self.agents_config['reporting_analyst'], # type: ignore[index]
-            verbose=True
+            config=self.agents_config['design_insight_specialist'], # type: ignore[index]
+            verbose=True,
+            tools = [google_search],
+            llm = 'gpt-4o'
+        ) 
+    
+    @agent
+    def designer(self) -> Agent:
+        return Agent(
+            config=self.agents_config['designer'], # type: ignore[index]
+            verbose=True,
+            llm = 'gpt-4o',
+            tools = [img_tool]
+        ) 
+    
+    @agent
+    def design_explainer(self) -> Agent:
+        return Agent(
+            config=self.agents_config['design_explainer'], # type: ignore[index]
+            verbose=True,
+            llm = 'gpt-4o'
         )
 
     # To learn more about structured task outputs,
@@ -81,12 +105,28 @@ class CrewFashionColor():
         return Task(
             config=self.tasks_config['research_task'], # type: ignore[index]
         )
+    
+    @task   
+    def design_decision_making(self) -> Task:
+        return Task(
+            config=self.tasks_config['design_decision_making'], # type: ignore[index]
+            context = [self.research_task()]
+        )
 
     @task
-    def reporting_task(self) -> Task:
+    def design_illustration(self) -> Task:
         return Task(
-            config=self.tasks_config['reporting_task'], # type: ignore[index]
-            output_file='report.md'
+            config=self.tasks_config['design_illustration'], # type: ignore[index]
+            output_file='design_illustration.md',
+            context = [self.design_decision_making()] 
+        )
+    
+    @task
+    def design_explanation(self) -> Task:
+        return Task(
+            config=self.tasks_config['design_explanation'], # type: ignore[index]
+            output_file='report.md',
+            context = [self.research_task(), self.design_decision_making()]
         )
 
     @crew

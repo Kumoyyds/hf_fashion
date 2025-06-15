@@ -18,6 +18,7 @@ def run():
     Run the crew.
     """
     inputs = {
+        'original_design': input("input your original design:\n"),
         'query': input("what is your need?:\n")
     }
     

@@ -1,27 +1,65 @@
 research_task:
   description: >
-    Conduct research based on the client's need:
-    {query}
+    1. Review the original sneaker design:
+       {original_design}
+       — Understand its shape, materials, and brand identity.
+
+    2. Interpret the client's request:
+       {query}
+       — Identify the desired mood, audience, or creative direction.
+
+    3. Research emerging sneaker color trends for the next 6–18 months,
+       based on the original design and client request. Focus on palettes,
+       moods, and seasonal influences that resonate with young adults.
+       Use sources such as fashion weeks, social media (TikTok, Instagram, Pinterest),
+       resale platforms (e.g., StockX), and color forecasts (Pantone, WGSN).
+
   expected_output: >
-    A comprehensive summary addressing the client's query, including:
-    - Key insights and findings
-    - Relevant market trends or benchmarks
-    - Supporting data or statistics (if applicable)
-    - Sources or references used
-    - Actionable recommendations (if appropriate)
+    A trend report including:
+    - 3 to 5 color palettes with names, hex codes, and mood associations
+    - Cultural or seasonal context for each palette
+    - Examples of brands, products, or influencers using similar schemes
   agent: researcher
 
-
-reporting_task:
+design_decision_making:
   description: >
-    Analyze the data provided and generate a clear, concise report tailored to the client's request:
-    {query}
+    1. Review the original sneaker design to understand its silhouette, materials, and visual identity:
+       {original_design}
+    2. Analyze the researcher's trend findings
+    3. Evaluate which trend-based color palettes best suit the sneaker’s structure, branding, and target audience.
+       Consider balance, contrast, and emotional impact when applying colors.
+    4. Determine a final colorway design, including primary, secondary, and accent colors.
   expected_output: >
-    A structured report that includes:
-    - Key performance indicators (KPIs) and relevant metrics
-    - Data visualizations (charts/tables) for clarity
-    - Brief analysis of trends, outliers, or anomalies
-    - Summary of insights in plain language
-    - Recommendations or next steps (if applicable)
-  agent: reporting_analyst
+    - Finalized sneaker colorway 
+    - Clear mapping of colors to sneaker components (e.g., upper, midsole, logo, outsole)
+  agent: design_insight_specialist
+
+design_illustration:
+  description: >
+    read original design:
+    {original_design}
+    1. Apply the finalized colorway fom design_insight_specialist
+       — Ensure correct mapping of colors to sneaker components (e.g., upper, sole, logo).
+    2. Maintain the original sneaker’s shape, layout, and proportions.
+       Only update the color regions, with no changes to structure, form, or design elements.
+    3. generate a high-resolution image of the recolored sneaker sketch.
+       Ensure the output is suitable for review and presentation.
+  expected_output: >
+    - A recolored sneaker sketch (image) that visually reflects the updated colorway
+    - Stable structure: shape, design lines, and layout identical to the original
+    - Color changes clearly applied to the correct zones
+    - Format: high-resolution image or base64-encoded output, ready for review and use in presentations
+  agent: designer
+
+
+design_explanation:
+  description: >
+    1. Craft a vivid, emotionally engaging narrative that brings the new sneaker colorway to life.
+    2. Highlight the design’s cultural relevance, aesthetic appeal, and emotional value.
+    3. Explain how the colorway aligns with current trends and resonates with the target market.
+    4. Use descriptive language to evoke imagery and feelings associated with the sneaker.
+  expected_output: >
+    - A compelling narrative that explains the design choices, cultural significance, and emotional impact of the new sneaker colorway
+    - Format: text document or presentation slide, ready for marketing use
+  agent: design_explainer
 
