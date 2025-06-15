@@ -21,13 +21,13 @@ crewai install
 The crew_fashion_color Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
 
 
-## How to use it
-**researcher agent**: doing the market research to understand the trend of color which could be suitable to given product. 
-**design_insight_specialist**: making the final decision on the colorway of the provided product.   
-**designer**: generating the illustration of the new colorway design  
-**design_explainer**: providing the story and philosophy of the new design.
+## agent information:    
+**researcher agent**: doing the market research to understand the trend of color which could be suitable to given product.   
+**design_insight_specialist**: making the final decision on the colorway of the provided product.    
+**designer**: generating the illustration of the new colorway design.  
+**design_explainer**: providing the story and philosophy of the new design.  
 
-# how to run it. 
+##  how to run it. 
 1. `crewai run`
 2. Input your original design and your needs.   
 
