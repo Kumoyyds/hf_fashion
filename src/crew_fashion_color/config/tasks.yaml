@@ -1,0 +1,27 @@
+research_task:
+  description: >
+    Conduct research based on the client's need:
+    {query}
+  expected_output: >
+    A comprehensive summary addressing the client's query, including:
+    - Key insights and findings
+    - Relevant market trends or benchmarks
+    - Supporting data or statistics (if applicable)
+    - Sources or references used
+    - Actionable recommendations (if appropriate)
+  agent: researcher
+
+
+reporting_task:
+  description: >
+    Analyze the data provided and generate a clear, concise report tailored to the client's request:
+    {query}
+  expected_output: >
+    A structured report that includes:
+    - Key performance indicators (KPIs) and relevant metrics
+    - Data visualizations (charts/tables) for clarity
+    - Brief analysis of trends, outliers, or anomalies
+    - Summary of insights in plain language
+    - Recommendations or next steps (if applicable)
+  agent: reporting_analyst
+
