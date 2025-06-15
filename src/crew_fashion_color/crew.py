@@ -77,7 +77,8 @@ class CrewFashionColor():
             config=self.agents_config['design_insight_specialist'], # type: ignore[index]
             verbose=True,
             tools = [google_search],
-            llm = 'gpt-4o'
+            llm = reasoner,
+            alllow_delegation=True
         ) 
     
     @agent
@@ -85,7 +86,7 @@ class CrewFashionColor():
         return Agent(
             config=self.agents_config['designer'], # type: ignore[index]
             verbose=True,
-            llm = 'gpt-4o',
+            llm = reasoner,
             tools = [img_tool]
         ) 
     
@@ -94,7 +95,7 @@ class CrewFashionColor():
         return Agent(
             config=self.agents_config['design_explainer'], # type: ignore[index]
             verbose=True,
-            llm = 'gpt-4o'
+            llm = reasoner
         )
 
     # To learn more about structured task outputs,
@@ -118,7 +119,7 @@ class CrewFashionColor():
         return Task(
             config=self.tasks_config['design_illustration'], # type: ignore[index]
             output_file='design_illustration.md',
-            context = [self.design_decision_making()] 
+            context = [self.design_decision_making()]
         )
     
     @task
